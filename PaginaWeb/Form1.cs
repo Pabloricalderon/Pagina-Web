@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Web.WebView2.Core;
+using System.IO;
 
 namespace PaginaWeb
 {
@@ -43,6 +44,15 @@ namespace PaginaWeb
                 args.Cancel = true;
             }
         }
+        private void Guardar(string fileName, string texto)
+        {
+            FileStream stream = new FileStream(fileName, FileMode.Append, FileAccess.Write);
+
+            StreamWriter writer = new StreamWriter(stream);
+
+            writer.WriteLine(texto);
+            writer.Close();
+        }
 
         private void Form_Resize(object sender, EventArgs e)
         {
@@ -55,6 +65,7 @@ namespace PaginaWeb
             //{
             //    webView21.CoreWebView2.Navigate(comboBox1.Text);
             //}
+           
 
             if (comboBox1.Text.Contains("https://www."))
             {
@@ -74,9 +85,35 @@ namespace PaginaWeb
             }
 
 
-          
+            Guardar("archivo.txt", comboBox1.Text);
+            comboBox1.Items.Clear();
+            MessageBox.Show("Historial guardado");
+
+            //Guardamos en una variable el nombre del archivo que abrimos
+            string fileName = @"C:\Users\edgar\Documents\Programacion III\PaginaWeb\PaginaWeb\bin\Debug\archivo.txt";
+
+            //Abrimos el archivo, en este caso lo abrimos para lectura
+            FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            StreamReader reader = new StreamReader(stream);
+
+            //Un ciclo para leer el archivo hasta el final del archivo
+            //Lo leído se va guardando en un control richTextBox
+            while (reader.Peek() > -1)
+            //Esta linea envía el texto leído a un control richTextBox, se puede cambiar para que
+            //lo muestre en otro control por ejemplo un combobox
+            {
+                comboBox1.Items.Add(reader.ReadLine());
+            }
+            //Cerrar el archivo, esta linea es importante porque sino despues de correr varias veces el programa daría error de que el archivo quedó abierto muchas veces. Entonces es necesario cerrarlo despues de terminar de leerlo.
+            reader.Close();
+
+
+
+
 
         }
+
+        
 
         private void inicioToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -96,7 +133,24 @@ namespace PaginaWeb
         private void Form1_Load(object sender, EventArgs e)
         {
             comboBox1.SelectedIndex = 0;
-           
+            //Guardamos en una variable el nombre del archivo que abrimos
+            string fileName = @"C:\Users\edgar\Documents\Programacion III\PaginaWeb\PaginaWeb\bin\Debug\archivo.txt";
+
+            //Abrimos el archivo, en este caso lo abrimos para lectura
+            FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            StreamReader reader = new StreamReader(stream);
+
+            //Un ciclo para leer el archivo hasta el final del archivo
+            //Lo leído se va guardando en un control richTextBox
+            while (reader.Peek() > -1)
+            //Esta linea envía el texto leído a un control richTextBox, se puede cambiar para que
+            //lo muestre en otro control por ejemplo un combobox
+            {
+                comboBox1.Items.Add(reader.ReadLine());
+            }
+            //Cerrar el archivo, esta linea es importante porque sino despues de correr varias veces el programa daría error de que el archivo quedó abierto muchas veces. Entonces es necesario cerrarlo despues de terminar de leerlo.
+            reader.Close();
+
         }
     }
 }
