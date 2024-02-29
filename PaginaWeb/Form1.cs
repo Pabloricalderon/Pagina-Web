@@ -14,6 +14,9 @@ namespace PaginaWeb
 {
     public partial class Form1 : Form
     {
+        //Innicializar lista de urls
+        List<Navegador> urls = new List<Navegador>();
+
         public Form1()
         {
             InitializeComponent();
@@ -59,6 +62,22 @@ namespace PaginaWeb
             webView21.Size = this.ClientSize - new System.Drawing.Size(webView21.Location);
         }
 
+        private void Grabar(string fileName)
+        {
+            FileStream stream = new FileStream(fileName, FileMode.Append, FileAccess.Write);
+            StreamWriter writer = new StreamWriter(stream);
+
+            foreach(var url in urls)
+            {
+                writer.WriteLine(url.Pagina);
+                writer.WriteLine(url.VecesIngreso);
+                writer.WriteLine(url.FechaIngreso);
+
+            }
+
+            writer.Close ();
+        }
+
         private void btnIr_Click(object sender, EventArgs e)
         {
             //if (webView21 != null && webView21.CoreWebView2 != null)
@@ -85,12 +104,37 @@ namespace PaginaWeb
             }
 
 
-            Guardar("archivo.txt", comboBox1.Text);
-            comboBox1.Items.Clear();
-            MessageBox.Show("Historial guardado");
+            //Guardar("archivo.txt", comboBox1.Text);
+            ////comboBox1.Items.Clear();
+            //MessageBox.Show("Historial guardado");
+
+
+
+            string urlIngresada = comboBox1.Text;
+
+            Navegador urlExiste = urls.Find(u => u.Pagina == urlIngresada);
+
+            if(urlExiste == null)
+            {
+                Navegador urlNueva = new Navegador();
+                urlNueva.Pagina = urlIngresada;
+                urlNueva.VecesIngreso = 1;
+                urlNueva.FechaIngreso = DateTime.Now;
+                urls.Add(urlNueva);
+                Grabar("historial.txt");
+                webView21.CoreWebView2.Navigate(urlIngresada);
+
+            }
+            else
+            {
+                urlExiste.VecesIngreso++;
+                urlExiste.FechaIngreso = DateTime.Now;
+                webView21.CoreWebView2.Navigate(urlExiste.Pagina);
+                Grabar("historial.txt");
+            }
 
             //Guardamos en una variable el nombre del archivo que abrimos
-            string fileName = @"C:\Users\edgar\Documents\Programacion III\PaginaWeb\PaginaWeb\bin\Debug\archivo.txt";
+            string fileName = @"C:\Users\edgar\Documents\Programacion III\PaginaWeb\PaginaWeb\bin\Debug\historial.txt";
 
             //Abrimos el archivo, en este caso lo abrimos para lectura
             FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
@@ -102,14 +146,20 @@ namespace PaginaWeb
             //Esta linea envía el texto leído a un control richTextBox, se puede cambiar para que
             //lo muestre en otro control por ejemplo un combobox
             {
-                comboBox1.Items.Add(reader.ReadLine());
+                Navegador url = new Navegador();
+                url.Pagina = reader.ReadLine();
+                url.VecesIngreso = int.Parse(reader.ReadLine());
+                url.FechaIngreso = Convert.ToDateTime(reader.ReadLine());
+
+                urls.Add(url);
+                //comboBox1.Items.Add(reader.ReadLine());
             }
             //Cerrar el archivo, esta linea es importante porque sino despues de correr varias veces el programa daría error de que el archivo quedó abierto muchas veces. Entonces es necesario cerrarlo despues de terminar de leerlo.
             reader.Close();
 
-
-
-
+            comboBox1.DisplayMember = "Pagina";
+            comboBox1.DataSource = urls;
+            comboBox1.Refresh();
 
         }
 

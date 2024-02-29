@@ -49,7 +49,7 @@
             this.navegarToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1413, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(1413, 33);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -119,9 +119,9 @@
             this.webView21.CreationProperties = null;
             this.webView21.DefaultBackgroundColor = System.Drawing.Color.White;
             this.webView21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webView21.Location = new System.Drawing.Point(0, 36);
+            this.webView21.Location = new System.Drawing.Point(0, 33);
             this.webView21.Name = "webView21";
-            this.webView21.Size = new System.Drawing.Size(1413, 594);
+            this.webView21.Size = new System.Drawing.Size(1413, 692);
             this.webView21.Source = new System.Uri("https://www.bing.com", System.UriKind.Absolute);
             this.webView21.TabIndex = 4;
             this.webView21.ZoomFactor = 1D;
@@ -130,7 +130,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1413, 630);
+            this.ClientSize = new System.Drawing.Size(1413, 725);
             this.Controls.Add(this.webView21);
             this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.comboBox1);
